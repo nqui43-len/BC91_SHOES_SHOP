@@ -37,7 +37,9 @@ const Profile = () => {
         await axios.post(
           "https://shop.cyberlearn.vn/api/Users/updateProfile",
           values,
-          { headers: { Authorization: `Bearer ${token}` } },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
         );
         alert("Cập nhật thông tin thành công!");
       } catch (err) {
@@ -53,15 +55,14 @@ const Profile = () => {
         navigate("/login");
         return;
       }
-
       const res = await axios.post(
         "https://shop.cyberlearn.vn/api/Users/getProfile",
         {},
-        { headers: { Authorization: `Bearer ${token}` } },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
-
       const profile = res.data.content;
-
       frm.setValues({
         email: profile.email,
         name: profile.name,
@@ -69,15 +70,9 @@ const Profile = () => {
         gender: profile.gender,
         password: "",
       });
-
       setOrdersHistory(profile.ordersHistory || []);
       setFavoriteProducts(profile.productsFavorite || []);
-    } catch (err) {
-      alert("Không thể tải thông tin cá nhân. Vui lòng đăng nhập lại.");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("userEmail");
-      navigate("/login");
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -87,7 +82,6 @@ const Profile = () => {
   return (
     <div className="container my-5" style={{ minHeight: "60vh" }}>
       <div className="profile-header-gradient w-50">Profile</div>
-
       <div className="row mb-5">
         <div className="col-md-3 text-center">
           <div
@@ -107,7 +101,6 @@ const Profile = () => {
             onChange={handleFileChange}
           />
         </div>
-
         <div className="col-md-9">
           <form onSubmit={frm.handleSubmit}>
             <div className="row gx-5">
@@ -137,7 +130,6 @@ const Profile = () => {
                   />
                 </div>
               </div>
-
               <div className="col-md-6">
                 <div className="mb-4">
                   <label className="form-label text-secondary mb-1">Name</label>
@@ -149,7 +141,6 @@ const Profile = () => {
                     onChange={frm.handleChange}
                   />
                 </div>
-
                 <div className="mb-4">
                   <label className="form-label text-secondary mb-1">
                     Password
@@ -162,7 +153,6 @@ const Profile = () => {
                     <i className="fa-solid fa-lock me-2"></i> Change Password...
                   </button>
                 </div>
-
                 <div className="d-flex justify-content-between align-items-center mt-4">
                   <div className="d-flex align-items-center">
                     <label className="form-label text-secondary mb-0 me-4">
@@ -202,7 +192,6 @@ const Profile = () => {
           </form>
         </div>
       </div>
-
       <div className="profile-tabs">
         <div
           className={`tab-item ${activeTab === "history" ? "active" : ""}`}
@@ -217,7 +206,6 @@ const Profile = () => {
           Favourite
         </div>
       </div>
-
       <div className="tab-content">
         {activeTab === "history" &&
           ordersHistory.map((order, index) => (
@@ -239,37 +227,29 @@ const Profile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.orderDetail.map((item: any, idx: number) => {
-                      const fakeQuantity = 1;
-                      return (
-                        <tr key={idx}>
-                          <td>{item.id || idx + 1}</td>
-                          <td>
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              style={{ width: "50px" }}
-                            />
-                          </td>
-                          <td className="fw-medium">{item.name}</td>
-                          <td className="fw-bold">{item.price}$</td>
-                          <td>
-                            <div className="qty-display mx-auto">
-                              {fakeQuantity}
-                            </div>
-                          </td>
-                          <td className="fw-bold text-danger">
-                            {item.price * fakeQuantity}$
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {order.orderDetail.map((item: any, idx: number) => (
+                      <tr key={idx}>
+                        <td>{item.id || idx + 1}</td>
+                        <td>
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            style={{ width: "50px" }}
+                          />
+                        </td>
+                        <td className="fw-medium">{item.name}</td>
+                        <td className="fw-bold">{item.price}$</td>
+                        <td>
+                          <div className="qty-display mx-auto">1</div>
+                        </td>
+                        <td className="fw-bold text-danger">{item.price}$</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
             </div>
           ))}
-
         {activeTab === "favourite" && (
           <div className="row">
             {favoriteProducts.length === 0 ? (
@@ -316,5 +296,4 @@ const Profile = () => {
     </div>
   );
 };
-
 export default Profile;

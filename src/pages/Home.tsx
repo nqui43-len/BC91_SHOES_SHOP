@@ -31,12 +31,29 @@ const Home = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  const getInitialLikes = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const res = await axios.post(
+          "https://shop.cyberlearn.vn/api/Users/getProfile",
+          {},
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        const favs = res.data.content.productsFavorite || [];
+        setLikedProducts(favs.map((p: any) => p.id));
+      } catch (err) {
+        console.log("Không thể lấy danh sách yêu thích");
+      }
+    }
+  };
+
   const getAllProduct = async () => {
     try {
       const res = await axios.get("https://shop.cyberlearn.vn/api/Product");
       setArrProduct(res.data.content);
     } catch (err) {
-      // Bỏ qua log
+      console.log("Lỗi lấy sản phẩm:", err);
     }
   };
 
@@ -83,6 +100,7 @@ const Home = () => {
 
   useEffect(() => {
     getAllProduct();
+    getInitialLikes();
   }, []);
 
   return (
@@ -236,6 +254,7 @@ const Home = () => {
           </ul>
         </nav>
       )}
+
       <StoreLocation />
     </div>
   );

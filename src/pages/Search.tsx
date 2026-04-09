@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import _ from "lodash";
@@ -18,6 +18,27 @@ const Search = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "">("");
   const [likedProducts, setLikedProducts] = useState<number[]>([]);
 
+  const getInitialLikes = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const res = await axios.post(
+          "https://shop.cyberlearn.vn/api/Users/getProfile",
+          {},
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        const favs = res.data.content.productsFavorite || [];
+        setLikedProducts(favs.map((p: any) => p.id));
+      } catch (err) {
+        console.log("Không thể lấy danh sách yêu thích");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getInitialLikes();
+  }, []);
+
   const handleSearch = async () => {
     if (!keyword.trim()) return;
     try {
@@ -26,7 +47,7 @@ const Search = () => {
       );
       setProducts(res.data.content);
     } catch (err) {
-      // Bỏ qua log
+      console.log("Lỗi tìm kiếm:", err);
     }
   };
 
