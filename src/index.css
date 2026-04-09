@@ -4,7 +4,6 @@ body {
 
 
 /*========HEADER CSS========*/
-
 .bg-dark {
   background-color: #000000 !important; 
 }
@@ -57,7 +56,6 @@ body {
 }
 
 /* ===== FOOTER CSS ===== */
-
 .footer-link {
   color: #000000;
   text-decoration: none;
@@ -93,8 +91,6 @@ body {
 }
 
 /* ===== PRODUCT CARD CUSTOM ===== */
-
-/* 1. Cái hộp bao bọc đôi giày */
 .product-card {
   background-color: #F8F8F8;
   border-radius: 0px;
@@ -102,20 +98,17 @@ body {
   overflow: hidden;
 }
 
-/* Hiệu ứng nổi lên khi đưa chuột vào đôi giày */
 .product-card:hover {
   box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
   transform: translateY(-5px);
 }
 
-/* 2. Khu vực chứa hình ảnh và trái tim */
 .product-img-box {
   position: relative;
   padding: 20px;
   text-align: center;
 }
 
-/* Trái tim ghim ở góc trên bên phải */
 .heart-icon {
   position: absolute;
   top: 15px;
@@ -125,7 +118,6 @@ body {
   cursor: pointer;
 }
 
-/* 3. Khu vực chứa tên và mô tả (Padding để chữ không dính lề) */
 .product-info {
   padding: 0px 20px 20px 20px;
 }
@@ -147,7 +139,6 @@ body {
   margin-bottom: 0; 
 }
 
-/* 4. Thanh chức năng dưới đáy (Flexbox chia đôi 50-50) */
 .product-action {
   display: flex;
   width: 100%;
@@ -190,7 +181,6 @@ body {
   height: 100%; 
 }
 
-/* 3 Chấm tròn (Indicators) */
 .carousel-indicators [data-bs-target] {
   width: 12px;
   height: 12px;
@@ -200,14 +190,12 @@ body {
   margin: 0 6px;
 }
 
-/* Khi chấm tròn được chọn (active) */
 .carousel-indicators .active {
   background-color: #FFFFFF;
   border: 2px solid #000000;
 }
 
 /* ===== 2. TIÊU ĐỀ PRODUCT FEATURE ===== */
-/* 1. Dải Gradient cho tiêu đề Product Feature */
 .product-feature-title {
   background: linear-gradient(180deg, #F21299 0%, #1B02B5 100%); 
   color: #FFFFFF;
@@ -221,7 +209,6 @@ body {
   font-size: 40px;
 }
 
-/* 2. Custom lại mũi tên Carousel thành hình tam giác */
 .custom-arrow {
   font-size: 40px;
   color: #c0c0c0;
@@ -232,7 +219,6 @@ body {
   color: #000000;
 }
 
-/* 3. Tinh chỉnh nút phân trang của Bootstrap cho đẹp hơn */
 .page-link {
   color: #000;
   padding: 10px 20px;
@@ -267,7 +253,7 @@ body {
 .custom-pagination .page-link:hover {
   background-color: #e0e0e0;
 }
-/* Nút bị vô hiệu hoá (đang ở trang 1 thì mờ nút Prev) */
+
 .custom-pagination .page-item.disabled .page-link {
   color: #cccccc;
   cursor: not-allowed;
@@ -308,8 +294,6 @@ body {
 }
 
 /* ===== FACEBOOK BUTTON & REGISTER LINK ===== */
-
-/* Link "Register now ?" */
 .register-link {
   color: #152AEBCC;
   text-decoration: none;
@@ -323,7 +307,6 @@ body {
   color: #3700B3;
 }
 
-/* Nút Continue with Facebook */
 .btn-facebook {
   background-color: #1877F2; 
   color: white;
@@ -346,7 +329,6 @@ body {
   color: white;
 }
 
-/* Biểu tượng logo Facebook */
 .btn-facebook i {
   font-size: 26px;
 }
@@ -435,7 +417,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Khung chứa Avatar */
 .avatar-container {
   width: 160px;
   height: 160px;
@@ -453,7 +434,6 @@ body {
   object-fit: cover;
 }
 
-/* Lớp phủ đen hiện lên khi đưa chuột vào Avatar */
 .avatar-overlay {
   position: absolute;
   bottom: 0;
@@ -473,7 +453,6 @@ body {
   opacity: 1;
 }
 
-/* Thanh Tabs (Order / Favourite) */
 .profile-tabs {
   display: flex;
   border-bottom: 2px solid #E0E0E0;
@@ -495,14 +474,12 @@ body {
   margin-bottom: -2px;
 }
 
-/* Tiêu đề ngày tháng của Order */
 .order-date-title {
   color: linear-gradient(90deg, #CB0DC3 0%, #7D0DB1 100%);
   font-weight: 400;
   margin-bottom: 20px;
 }
 
-/* Tái sử dụng màu xám cho header bảng Order */
 .order-table-header {
   background-color: #D9D9D9 !important;
 }

@@ -6,10 +6,8 @@ import { useNavigate, NavLink } from "react-router-dom";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
-
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const frm = useFormik({
     initialValues: {
       newPassword: "",
@@ -33,18 +31,14 @@ const ChangePassword = () => {
           navigate("/login");
           return;
         }
-
         await axios.post(
           "https://shop.cyberlearn.vn/api/Users/changePassword",
           { newPassword: values.newPassword },
           { headers: { Authorization: `Bearer ${token}` } },
         );
-
         alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
-
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userEmail");
-
         navigate("/login");
       } catch (err: any) {
         console.log("Lỗi đổi mật khẩu:", err);
@@ -52,7 +46,6 @@ const ChangePassword = () => {
       }
     },
   });
-
   return (
     <div className="container my-5">
       <h2 className="mb-3 fw-normal text-center" style={{ fontSize: "40px" }}>
@@ -69,7 +62,6 @@ const ChangePassword = () => {
             onSubmit={frm.handleSubmit}
             className="p-4 border rounded shadow-sm bg-white"
           >
-            {/* Nút quay lại Profile */}
             <div className="mb-4">
               <NavLink
                 to="/profile"
@@ -78,8 +70,6 @@ const ChangePassword = () => {
                 <i className="fa-solid fa-arrow-left me-2"></i> Back to Profile
               </NavLink>
             </div>
-
-            {/* Ô nhập Mật khẩu mới */}
             <div className="mb-4">
               <label className="form-label text-secondary mb-1">
                 New Password
@@ -108,8 +98,6 @@ const ChangePassword = () => {
                 </div>
               )}
             </div>
-
-            {/* Ô Xác nhận Mật khẩu mới */}
             <div className="mb-4">
               <label className="form-label text-secondary mb-1">
                 Confirm New Password

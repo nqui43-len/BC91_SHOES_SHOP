@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// 1. Dữ liệu mảng địa chỉ mới từ API
 const storeList = [
   {
     id: 2,
@@ -39,13 +38,10 @@ const StoreLocation = () => {
   const activeStores = storeList.filter((store) => !store.deleted);
   const [activeStore, setActiveStore] = useState(activeStores[0]);
 
-  // 2. Hàm thông minh: Ưu tiên Tọa độ -> Nếu thiếu thì dùng Địa chỉ chữ
   const getMapEmbedUrl = (store: any) => {
-    // Nếu có cả vĩ độ (latitude) và kinh độ (longtitude)
     if (store.latitude && store.longtitude) {
       return `https://maps.google.com/maps?q=${store.latitude},${store.longtitude}&hl=vi&z=16&output=embed`;
     }
-    // Fallback: Nếu không có tọa độ, tự động gộp Tên + Địa chỉ để Google tự tìm
     const searchQuery = `${store.name}, ${store.description}`;
     return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&hl=vi&z=16&output=embed`;
   };
@@ -55,9 +51,7 @@ const StoreLocation = () => {
       <h3 className="text-center mb-5 fw-normal" style={{ fontSize: "32px" }}>
         - Hệ Thống Cửa Hàng -
       </h3>
-
       <div className="row">
-        {/* CỘT TRÁI: Danh sách các cửa hàng */}
         <div className="col-md-4 mb-4">
           <div className="list-group shadow-sm">
             {activeStores.map((store) => (
@@ -68,7 +62,6 @@ const StoreLocation = () => {
                 onClick={() => setActiveStore(store)}
                 style={{ cursor: "pointer", transition: "all 0.3s" }}
               >
-                {/* Ảnh nhỏ của cửa hàng */}
                 <div
                   style={{
                     width: "60px",
@@ -93,8 +86,6 @@ const StoreLocation = () => {
                     }
                   />
                 </div>
-
-                {/* Thông tin cửa hàng */}
                 <div>
                   <h6 className="mb-1 fw-bold">{store.name}</h6>
                   <p
@@ -109,8 +100,6 @@ const StoreLocation = () => {
             ))}
           </div>
         </div>
-
-        {/* CỘT PHẢI: Hiển thị Bản đồ */}
         <div className="col-md-8">
           <div
             className="shadow-sm h-100"

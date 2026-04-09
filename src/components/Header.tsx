@@ -10,19 +10,14 @@ const Header = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   const handleLogout = () => {
-    // 1. Xóa sạch két sắt
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userEmail");
-    // 2. Xóa sạch mây Redux
     dispatch(logoutAction());
   };
   const renderLoginUI = () => {
     if (userEmail) {
-      // Nếu có email, cắt lấy phần đầu làm tên
       const nameDisplay = userEmail.split("@")[0];
-      // Cắt lấy chữ cái đầu tiên và viết hoa lên làm Avatar
       const firstLetter = nameDisplay.charAt(0).toUpperCase();
-
       return (
         <div className="d-flex align-items-center gap-3">
           <NavLink
@@ -32,7 +27,6 @@ const Header = () => {
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
-            {/* Hình tròn Avatar */}
             <div
               className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
               style={{
@@ -43,11 +37,8 @@ const Header = () => {
             >
               {firstLetter}
             </div>
-
-            {/* Tên hiển thị */}
             <span className="text-white">Hi, {nameDisplay}</span>
           </NavLink>
-          {/* Nút Đăng xuất */}
           <span
             style={{ cursor: "pointer" }}
             onClick={handleLogout}
@@ -59,8 +50,6 @@ const Header = () => {
         </div>
       );
     }
-
-    // Nếu chưa đăng nhập thì hiện như cũ
     return (
       <>
         <NavLink to="/login" className="text-white text-decoration-none me-3">
@@ -102,12 +91,10 @@ const Header = () => {
             >
               <i className="fa-solid fa-cart-shopping"></i> ({totalQuantity})
             </NavLink>
-            {/* HIỂN THỊ UI ĐĂNG NHẬP HOẶC AVATAR Ở ĐÂY */}
             {renderLoginUI()}
           </div>
         </div>
       </div>
-
       <div className="bg-white py-3 shadow-sm">
         <div className="container">
           <nav className="d-flex gap-4 fw-semibold fs-5">
