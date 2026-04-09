@@ -1,11 +1,57 @@
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { changeQuantity, removeFromCart, clearCart } from "../store/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { changeQuantity, removeFromCart } from "../store/cartSlice";
 import type { RootState } from "../store/store";
 
 const Carts = () => {
   const dispatch = useDispatch();
   // Kéo dữ liệu giỏ hàng từ Redux xuống
   const cart = useSelector((state: RootState) => state.cart);
+  const navigate = useNavigate();
+
+  const handleSubmitOrder = async () => {
+    // 1. Mở két sắt lấy Thẻ ra vào và Email
+    const token = localStorage.getItem("accessToken");
+    const email = localStorage.getItem("userEmail");
+
+    // Nếu chưa có Thẻ (Chưa đăng nhập) thì đuổi đi Đăng nhập
+    if (!token || !email) {
+      alert("Vui lòng đăng nhập để thực hiện thanh toán!");
+      navigate("/login");
+      return;
+    }
+
+    // 2. Gói hàng theo đúng chuẩn Server yêu cầu
+    const orderData = {
+      orderDetail: cart.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+      email: email,
+    };
+
+    try {
+      // 3. Gọi shipper Axios mang hàng đi giao. Kèm theo Thẻ ra vào (Authorization) ở phần Header
+      await axios.post(
+        "https://shop.cyberlearn.vn/api/Users/order",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // 4. Nếu Server báo OK
+      alert("Tuyệt vời! Bạn đã đặt hàng thành công!");
+      dispatch(clearCart());
+      navigate("/");
+    } catch (err: any) {
+      console.log("Lỗi đặt hàng:", err);
+      alert("Đặt hàng thất bại: " + err.response?.data?.content);
+    }
+  };
 
   return (
     <div className="container my-5" style={{ minHeight: "60vh" }}>
@@ -129,7 +175,9 @@ const Carts = () => {
 
           {/* Nút Đặt hàng nằm dưới cùng bên phải */}
           <div className="d-flex justify-content-end mt-4">
-            <button className="btn-submit-order">SUBMIT ORDER</button>
+            <button className="btn-submit-order" onClick={handleSubmitOrder}>
+              SUBMIT ORDER
+            </button>
           </div>
         </>
       )}

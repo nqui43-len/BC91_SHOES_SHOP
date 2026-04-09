@@ -38,10 +38,14 @@ const cartSlice = createSlice({
     removeFromCart: (state, action: PayloadAction<{ id: number; size: string }>) => {
       const { id, size } = action.payload;
       return state.filter(item => !(item.id === id && item.size === size));
+    },
+
+    clearCart: () => {
+      return [];
     }
     
   } // ĐÓNG CỬA REDUCERS
 });
 
-export const { addToCart, changeQuantity, removeFromCart } = cartSlice.actions;
+export const { addToCart, changeQuantity, removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

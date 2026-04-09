@@ -424,3 +424,85 @@ body {
 .btn-delete-cart {
   flex: 1;
 }
+
+/* ===== PROFILE PAGE CSS ===== */
+.profile-header-gradient {
+  background: linear-gradient(180deg, #F21299 0%, #1B02B5 100%);
+  color: white;
+  padding: 12px 20px;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+/* Khung chứa Avatar */
+.avatar-container {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  margin: 0 auto;
+  border: 3px solid #E0E0E0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lớp phủ đen hiện lên khi đưa chuột vào Avatar */
+.avatar-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.avatar-container:hover .avatar-overlay {
+  opacity: 1;
+}
+
+/* Thanh Tabs (Order / Favourite) */
+.profile-tabs {
+  display: flex;
+  border-bottom: 2px solid #E0E0E0;
+  margin-bottom: 30px;
+}
+
+.tab-item {
+  font-size: 20px;
+  padding: 10px 30px;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.3s;
+}
+
+.tab-item.active {
+  color: #C82B8A;
+  font-weight: 500;
+  border-bottom: 3px solid #C82B8A;
+  margin-bottom: -2px;
+}
+
+/* Tiêu đề ngày tháng của Order */
+.order-date-title {
+  color: linear-gradient(90deg, #CB0DC3 0%, #7D0DB1 100%);
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+/* Tái sử dụng màu xám cho header bảng Order */
+.order-table-header {
+  background-color: #D9D9D9 !important;
+}

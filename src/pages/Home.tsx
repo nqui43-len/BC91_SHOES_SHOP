@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import StoreLocation from "../components/StoreLocation";
 
 export interface ProductModel {
   id: number;
@@ -189,6 +190,7 @@ const Home = () => {
           </ul>
         </nav>
       )}
+      <StoreLocation />
     </div>
   );
 };

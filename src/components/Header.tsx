@@ -18,28 +18,36 @@ const Header = () => {
   };
   const renderLoginUI = () => {
     if (userEmail) {
-      // Nếu có email (hoangqui@cybersoft.com), cắt lấy phần đầu ("hoangqui") làm tên
+      // Nếu có email, cắt lấy phần đầu làm tên
       const nameDisplay = userEmail.split("@")[0];
-      // Cắt lấy chữ cái đầu tiên ("h") và viết hoa lên ("H") làm Avatar
+      // Cắt lấy chữ cái đầu tiên và viết hoa lên làm Avatar
       const firstLetter = nameDisplay.charAt(0).toUpperCase();
 
       return (
         <div className="d-flex align-items-center gap-3">
-          {/* Hình tròn Avatar */}
-          <div
-            className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
-            style={{
-              width: "35px",
-              height: "35px",
-              backgroundColor: "#6200EE",
-            }}
+          <NavLink
+            to="/profile"
+            className="d-flex align-items-center gap-2 text-decoration-none"
+            style={{ transition: "opacity 0.3s" }}
+
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
-            {firstLetter}
-          </div>
+            {/* Hình tròn Avatar */}
+            <div
+              className="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold"
+              style={{
+                width: "35px",
+                height: "35px",
+                backgroundColor: "#6200EE",
+              }}
+            >
+              {firstLetter}
+            </div>
 
-          {/* Tên hiển thị */}
-          <span className="text-white">Hi, {nameDisplay}</span>
-
+            {/* Tên hiển thị */}
+            <span className="text-white">Hi, {nameDisplay}</span>
+          </NavLink>
           {/* Nút Đăng xuất */}
           <span
             style={{ cursor: "pointer" }}
