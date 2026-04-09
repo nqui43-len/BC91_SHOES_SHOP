@@ -4,7 +4,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 
-// 1. Khai báo kiểu dữ liệu cho sản phẩm chi tiết (Vì nó có thêm mảng size và relatedProducts)
 export interface ProductDetailModel {
   id: number;
   name: string;
@@ -17,30 +16,25 @@ export interface ProductDetailModel {
 }
 
 const Detail = () => {
-  // 2. useParams: Móc lấy cái "id" trên thanh địa chỉ URL (ví dụ /detail/3 thì lấy số 3)
   const { id } = useParams();
   const dispatch = useDispatch();
   const [product, setProduct] = useState<ProductDetailModel | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>("");
 
-  // 3. Hàm gọi API lấy chi tiết sản phẩm dựa theo ID
   const getProductDetail = async () => {
     try {
       const res = await axios.get(
         `https://shop.cyberlearn.vn/api/Product/getbyid?id=${id}`,
       );
       setProduct(res.data.content);
-    } catch (err) {
-      console.log("Lỗi tải chi tiết sản phẩm:", err);
-    }
+    } catch (err) {}
   };
 
-  // 4. useEffect: Chạy hàm gọi API.
   useEffect(() => {
     getProductDetail();
     setQuantity(1);
-    setSelectedSize('');
+    setSelectedSize("");
     window.scrollTo(0, 0);
   }, [id]);
 
@@ -54,7 +48,6 @@ const Detail = () => {
 
   return (
     <div className="container my-5">
-      {/* PHẦN 1: THÔNG TIN CHI TIẾT SẢN PHẨM */}
       <div className="row mb-5">
         <div className="col-md-4 d-flex justify-content-center align-items-center bg-light p-4">
           <img
@@ -65,7 +58,6 @@ const Detail = () => {
           />
         </div>
 
-        {/* Cột phải: Thông tin */}
         <div className="col-md-8 px-md-5">
           <h2 className="fw-normal mb-3">{product.name}</h2>
           <p className="text-secondary">{product.description}</p>
@@ -73,9 +65,9 @@ const Detail = () => {
           <h5 className="text-success mb-3">Available size</h5>
           <div className="d-flex flex-wrap gap-2 mb-4">
             {product.size.map((sz, index) => (
-              <button 
-                key={index} 
-                className={`btn fw-bold rounded-0 px-3 ${selectedSize === sz ? 'btn-dark' : 'btn-outline-secondary'}`}
+              <button
+                key={index}
+                className={`btn fw-bold rounded-0 px-3 ${selectedSize === sz ? "btn-dark" : "btn-outline-secondary"}`}
                 onClick={() => setSelectedSize(sz)}
               >
                 {sz}
@@ -103,26 +95,28 @@ const Detail = () => {
             </button>
           </div>
 
-          <button 
+          <button
             className="btn btn-submit-purple rounded-0"
             onClick={() => {
-              // 1. Kiểm tra xem đã chọn size chưa?
               if (!selectedSize) {
-                alert('Vui lòng chọn size giày trước khi thêm vào giỏ!');
+                alert("Vui lòng chọn size giày trước khi thêm vào giỏ!");
                 return;
               }
 
-              // 2. Gói hàng có chứa cả Size
               if (product) {
-                dispatch(addToCart({
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                  image: product.image,
-                  quantity: quantity,
-                  size: selectedSize
-                }));
-                alert(`Đã thêm giày size ${selectedSize} vào giỏ hàng thành công!`);
+                dispatch(
+                  addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: quantity,
+                    size: selectedSize,
+                  }),
+                );
+                alert(
+                  `Đã thêm giày size ${selectedSize} vào giỏ hàng thành công!`,
+                );
               }
             }}
           >
@@ -131,7 +125,6 @@ const Detail = () => {
         </div>
       </div>
 
-      {/* PHẦN 2: SẢN PHẨM LIÊN QUAN (RELATED PRODUCTS) */}
       <h3 className="text-center mb-4">- Realate Product -</h3>
       <div className="row">
         {product.relatedProducts.map((item) => (

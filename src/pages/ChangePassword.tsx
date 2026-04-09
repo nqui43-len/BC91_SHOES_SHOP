@@ -8,6 +8,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const frm = useFormik({
     initialValues: {
       newPassword: "",
@@ -41,11 +42,11 @@ const ChangePassword = () => {
         localStorage.removeItem("userEmail");
         navigate("/login");
       } catch (err: any) {
-        console.log("Lỗi đổi mật khẩu:", err);
         alert("Đổi mật khẩu thất bại!");
       }
     },
   });
+
   return (
     <div className="container my-5">
       <h2 className="mb-3 fw-normal text-center" style={{ fontSize: "40px" }}>
