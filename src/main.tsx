@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import Carts from "./pages/Carts";
 import Profile from "./pages/Profile";
 import ChangePassword from "./pages/ChangePassword";
+import Search from "./pages/Search";
 
 const MainLayout = () => {
   return (
@@ -43,6 +44,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="carts" element={<Carts />} />
           <Route path="profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>

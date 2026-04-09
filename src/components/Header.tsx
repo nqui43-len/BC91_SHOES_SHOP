@@ -29,7 +29,6 @@ const Header = () => {
             to="/profile"
             className="d-flex align-items-center gap-2 text-decoration-none"
             style={{ transition: "opacity 0.3s" }}
-
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
@@ -89,13 +88,13 @@ const Header = () => {
           </NavLink>
 
           <div className="d-flex align-items-center gap-4">
-            <div
-              className="d-flex align-items-center"
-              style={{ cursor: "pointer" }}
+            <NavLink
+              to="/search"
+              className="text-white text-decoration-none d-flex align-items-center"
             >
               <i className="fa fa-search me-2"></i>
               Search
-            </div>
+            </NavLink>
 
             <NavLink
               to="/carts"

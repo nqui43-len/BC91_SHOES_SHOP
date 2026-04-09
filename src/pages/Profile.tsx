@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 
 const Profile = () => {
@@ -12,7 +12,9 @@ const Profile = () => {
     "https://i.pravatar.cc/300",
   );
   const [ordersHistory, setOrdersHistory] = useState<any[]>([]);
+  const [favoriteProducts, setFavoriteProducts] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -21,7 +23,6 @@ const Profile = () => {
     }
   };
 
-  // 1. Khởi tạo Formik với giá trị rỗng trước
   const frm = useFormik({
     initialValues: {
       email: "",
@@ -36,9 +37,7 @@ const Profile = () => {
         await axios.post(
           "https://shop.cyberlearn.vn/api/Users/updateProfile",
           values,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         alert("Cập nhật thông tin thành công!");
       } catch (err) {
@@ -47,7 +46,6 @@ const Profile = () => {
     },
   });
 
-  // 2. Hàm lấy dữ liệu thật từ API
   const getProfileData = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -59,13 +57,11 @@ const Profile = () => {
       const res = await axios.post(
         "https://shop.cyberlearn.vn/api/Users/getProfile",
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       const profile = res.data.content;
-      // Đổ dữ liệu vào Formik
+
       frm.setValues({
         email: profile.email,
         name: profile.name,
@@ -74,10 +70,13 @@ const Profile = () => {
         password: "",
       });
 
-      // Đổ dữ liệu vào danh sách đơn hàng
       setOrdersHistory(profile.ordersHistory || []);
+      setFavoriteProducts(profile.productsFavorite || []);
     } catch (err) {
-      console.log("Lỗi lấy profile:", err);
+      alert("Không thể tải thông tin cá nhân. Vui lòng đăng nhập lại.");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("userEmail");
+      navigate("/login");
     }
   };
 
@@ -91,7 +90,6 @@ const Profile = () => {
 
       <div className="row mb-5">
         <div className="col-md-3 text-center">
-          {/* Phần Avatar giữ nguyên */}
           <div
             className="avatar-container mb-3"
             onClick={() => fileInputRef.current?.click()}
@@ -243,7 +241,6 @@ const Profile = () => {
                   <tbody>
                     {order.orderDetail.map((item: any, idx: number) => {
                       const fakeQuantity = 1;
-
                       return (
                         <tr key={idx}>
                           <td>{item.id || idx + 1}</td>
@@ -256,7 +253,6 @@ const Profile = () => {
                           </td>
                           <td className="fw-medium">{item.name}</td>
                           <td className="fw-bold">{item.price}$</td>
-
                           <td>
                             <div className="qty-display mx-auto">
                               {fakeQuantity}
@@ -273,14 +269,47 @@ const Profile = () => {
               </div>
             </div>
           ))}
+
         {activeTab === "favourite" && (
           <div className="row">
-            <div className="col-12 text-center text-secondary py-5">
-              <h5>Bạn chưa có sản phẩm yêu thích nào.</h5>
-              <p>
-                Hãy ra trang chủ và thả tim cho những đôi giày bạn thích nhé!
-              </p>
-            </div>
+            {favoriteProducts.length === 0 ? (
+              <div className="col-12 text-center text-secondary py-5">
+                <h5>Bạn chưa có sản phẩm yêu thích nào.</h5>
+                <p>
+                  Hãy ra trang chủ và thả tim cho những đôi giày bạn thích nhé!
+                </p>
+              </div>
+            ) : (
+              favoriteProducts.map((item) => (
+                <div className="col-4 mb-4" key={item.id}>
+                  <div className="product-card">
+                    <div className="product-img-box">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="img-fluid"
+                      />
+                      <i className="fa-solid fa-heart heart-icon text-danger"></i>
+                    </div>
+                    <div className="product-info">
+                      <h5 className="product-name">{item.name}</h5>
+                      <p className="product-desc">{item.shortDescription}</p>
+                    </div>
+                    <div className="product-action">
+                      <NavLink
+                        to={`/detail/${item.id}`}
+                        className="btn-buy-now"
+                      >
+                        Buy now
+                      </NavLink>
+                      <div className="btn-price">
+                        {item.price?.toLocaleString()} $
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
