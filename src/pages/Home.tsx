@@ -34,7 +34,6 @@ const Home = () => {
           { headers: { Authorization: `Bearer ${token}` } },
         );
         const favs = res.data.content.productsFavorite || [];
-        // FIX: Ép kiểu dữ liệu về Number để chắc chắn không bị lệch pha
         setLikedProducts(favs.map((p: any) => Number(p.id)));
       } catch (err) {}
     }

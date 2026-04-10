@@ -96,6 +96,7 @@ const Profile = () => {
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setLikedProducts(likedProducts.filter((id) => id !== productId));
+        // FIX: Xóa ngay sản phẩm ra khỏi danh sách hiển thị khi bỏ thả tim ở Profile
         setFavoriteProducts(
           favoriteProducts.filter((item) => item.id !== productId),
         );
