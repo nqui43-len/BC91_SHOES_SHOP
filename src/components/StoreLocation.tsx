@@ -38,6 +38,7 @@ const StoreLocation = () => {
   const activeStores = storeList.filter((store) => !store.deleted);
   const [activeStore, setActiveStore] = useState(activeStores[0]);
 
+  // Đã sửa lại đường dẫn Google Maps chuẩn xác
   const getMapEmbedUrl = (store: any) => {
     if (store.latitude && store.longtitude) {
       return `https://maps.google.com/maps?q=${store.latitude},${store.longtitude}&hl=vi&z=16&output=embed`;
@@ -52,7 +53,7 @@ const StoreLocation = () => {
         - Hệ Thống Cửa Hàng -
       </h3>
       <div className="row">
-        <div className="col-md-4 mb-4">
+        <div className="col-12 col-md-4 mb-4">
           <div className="list-group shadow-sm">
             {activeStores.map((store) => (
               <button
@@ -100,7 +101,8 @@ const StoreLocation = () => {
             ))}
           </div>
         </div>
-        <div className="col-md-8">
+
+        <div className="col-12 col-md-8">
           <div
             className="shadow-sm h-100"
             style={{

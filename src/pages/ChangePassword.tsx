@@ -58,7 +58,8 @@ const ChangePassword = () => {
       />
 
       <div className="row justify-content-center">
-        <div className="col-md-5">
+        {/* Responsive: 12 cột cho mobile, 8 cột cho tablet, 6 cột cho PC */}
+        <div className="col-12 col-md-8 col-lg-6">
           <form
             onSubmit={frm.handleSubmit}
             className="p-4 border rounded shadow-sm bg-white"

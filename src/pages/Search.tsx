@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import _ from "lodash";
-
-export interface ProductModel {
-  id: number;
-  name: string;
-  price: number;
-  shortDescription: string;
-  image: string;
-}
+import ProductCard, { type ProductModel } from "../components/ProductCard";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -29,9 +22,7 @@ const Search = () => {
         );
         const favs = res.data.content.productsFavorite || [];
         setLikedProducts(favs.map((p: any) => p.id));
-      } catch (err) {
-        console.log("Không thể lấy danh sách yêu thích");
-      }
+      } catch (err) {}
     }
   };
 
@@ -46,9 +37,7 @@ const Search = () => {
         `https://shop.cyberlearn.vn/api/Product?keyword=${keyword}`,
       );
       setProducts(res.data.content);
-    } catch (err) {
-      console.log("Lỗi tìm kiếm:", err);
-    }
+    } catch (err) {}
   };
 
   const toggleLike = async (productId: number) => {
@@ -147,41 +136,12 @@ const Search = () => {
           </div>
         ) : (
           sortedProducts.map((item) => (
-            <div className="col-4 mb-4" key={item.id}>
-              <div className="product-card">
-                <div className="product-img-box">
-                  <img src={item.image} alt={item.name} className="img-fluid" />
-                  <i
-                    className={`${likedProducts.includes(item.id) ? "fa-solid text-danger" : "fa-regular text-dark"} fa-heart heart-icon`}
-                    style={{ cursor: "pointer", transition: "transform 0.2s" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.transform = "scale(1.2)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.transform = "scale(1)")
-                    }
-                    onClick={() => toggleLike(item.id)}
-                    title={
-                      likedProducts.includes(item.id)
-                        ? "Bỏ yêu thích"
-                        : "Thêm vào yêu thích"
-                    }
-                  ></i>
-                </div>
-                <div className="product-info">
-                  <h5 className="product-name">{item.name}</h5>
-                  <p className="product-desc">{item.shortDescription}</p>
-                </div>
-                <div className="product-action">
-                  <NavLink to={`/detail/${item.id}`} className="btn-buy-now">
-                    Buy now
-                  </NavLink>
-                  <div className="btn-price">
-                    {item.price.toLocaleString()} $
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProductCard
+              key={item.id}
+              item={item}
+              isLiked={likedProducts.includes(item.id)}
+              onToggleLike={toggleLike}
+            />
           ))
         )}
       </div>

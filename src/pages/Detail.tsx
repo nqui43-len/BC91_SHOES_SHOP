@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/cartSlice";
+import ProductCard, { type ProductModel } from "../components/ProductCard";
 
 export interface ProductDetailModel {
   id: number;
@@ -12,15 +13,17 @@ export interface ProductDetailModel {
   shortDescription: string;
   image: string;
   size: string[];
-  relatedProducts: any[];
+  relatedProducts: ProductModel[];
 }
 
 const Detail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [product, setProduct] = useState<ProductDetailModel | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [likedProducts, setLikedProducts] = useState<number[]>([]);
 
   const getProductDetail = async () => {
     try {
@@ -31,8 +34,65 @@ const Detail = () => {
     } catch (err) {}
   };
 
+  const getInitialLikes = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const res = await axios.post(
+          "https://shop.cyberlearn.vn/api/Users/getProfile",
+          {},
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        const favs = res.data.content.productsFavorite || [];
+        setLikedProducts(favs.map((p: any) => p.id));
+      } catch (err) {}
+    }
+  };
+
+  const toggleLike = async (productId: number) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Vui lòng đăng nhập để sử dụng tính năng Yêu thích!");
+      navigate("/login");
+      return;
+    }
+
+    const isAlreadyLiked = likedProducts.includes(productId);
+
+    try {
+      if (isAlreadyLiked) {
+        await axios.get(
+          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        setLikedProducts(likedProducts.filter((id) => id !== productId));
+      } else {
+        await axios.get(
+          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        setLikedProducts([...likedProducts, productId]);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        alert("Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userEmail");
+        navigate("/login");
+      } else {
+        const errorMsg = err.response?.data?.content || "Lỗi kết nối";
+        if (errorMsg.includes("đã") || errorMsg.includes("already")) {
+          setLikedProducts([...likedProducts, productId]);
+        } else {
+          alert("Thao tác thất bại: " + errorMsg);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     getProductDetail();
+    getInitialLikes();
     setQuantity(1);
     setSelectedSize("");
     window.scrollTo(0, 0);
@@ -41,7 +101,7 @@ const Detail = () => {
   if (!product) {
     return (
       <div className="container mt-5 text-center">
-        <h3>Đang tải dữ liệu...</h3>
+        <h3 className="text-secondary">Đang tải dữ liệu...</h3>
       </div>
     );
   }
@@ -49,7 +109,7 @@ const Detail = () => {
   return (
     <div className="container my-5">
       <div className="row mb-5">
-        <div className="col-md-4 d-flex justify-content-center align-items-center bg-light p-4">
+        <div className="col-12 col-md-4 d-flex justify-content-center align-items-center bg-light p-4 mb-4 mb-md-0">
           <img
             src={product.image}
             alt={product.name}
@@ -58,7 +118,7 @@ const Detail = () => {
           />
         </div>
 
-        <div className="col-md-8 px-md-5">
+        <div className="col-12 col-md-8 px-md-5">
           <h2 className="fw-normal mb-3">{product.name}</h2>
           <p className="text-secondary">{product.description}</p>
 
@@ -103,21 +163,19 @@ const Detail = () => {
                 return;
               }
 
-              if (product) {
-                dispatch(
-                  addToCart({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    image: product.image,
-                    quantity: quantity,
-                    size: selectedSize,
-                  }),
-                );
-                alert(
-                  `Đã thêm giày size ${selectedSize} vào giỏ hàng thành công!`,
-                );
-              }
+              dispatch(
+                addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  quantity: quantity,
+                  size: selectedSize,
+                }),
+              );
+              alert(
+                `Đã thêm giày size ${selectedSize} vào giỏ hàng thành công!`,
+              );
             }}
           >
             Add to cart
@@ -125,27 +183,15 @@ const Detail = () => {
         </div>
       </div>
 
-      <h3 className="text-center mb-4">- Realate Product -</h3>
+      <h3 className="text-center mb-4">- Related Products -</h3>
       <div className="row">
         {product.relatedProducts.map((item) => (
-          <div className="col-4 mb-4" key={item.id}>
-            <div className="product-card">
-              <div className="product-img-box">
-                <img src={item.image} alt={item.name} className="img-fluid" />
-                <i className="fa-regular fa-heart heart-icon"></i>
-              </div>
-              <div className="product-info">
-                <h5 className="product-name">{item.name}</h5>
-                <p className="product-desc">{item.shortDescription}</p>
-              </div>
-              <div className="product-action">
-                <NavLink to={`/detail/${item.id}`} className="btn-buy-now">
-                  Buy now
-                </NavLink>
-                <div className="btn-price">{item.price.toLocaleString()} $</div>
-              </div>
-            </div>
-          </div>
+          <ProductCard
+            key={item.id}
+            item={item}
+            isLiked={likedProducts.includes(item.id)}
+            onToggleLike={toggleLike}
+          />
         ))}
       </div>
     </div>

@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="bg-white pt-5 pb-4 footer-top-section footer-column-spacing">
         <div className="container">
           <div className="row">
-            <div className="col-4 footer-column-divider">
+            <div className="col-12 col-md-4 footer-column-divider mb-4 mb-md-0">
               <h5 className="fw-bold mb-3">GET HELP</h5>
               <ul className="list-unstyled d-flex flex-column gap-2">
                 <li>
@@ -32,7 +32,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            <div className="col-4 footer-column-divider footer-column-spacing">
+            <div className="col-12 col-md-4 footer-column-divider footer-column-spacing mb-4 mb-md-0">
               <h5 className="fw-bold mb-3">SUPPORT</h5>
               <ul className="list-unstyled d-flex flex-column gap-2">
                 <li>
@@ -58,7 +58,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            <div className="col-4 footer-column-spacing">
+            <div className="col-12 col-md-4 footer-column-spacing">
               <h5 className="fw-bold mb-3">REGISTER</h5>
               <ul className="list-unstyled d-flex flex-column gap-2">
                 <li>
@@ -78,8 +78,9 @@ const Footer = () => {
       </div>
       <div className="py-3" style={{ backgroundColor: "#D9D9D9" }}>
         <div className="container text-center">
-          <p className="footer-copyright">
-            © 2022 Cybersoft All Rights Reserved | Design Theme by Trương Tấn Khải
+          <p className="footer-copyright mb-0">
+            © 2022 Cybersoft All Rights Reserved | Design Theme by Trương Tấn
+            Khải
           </p>
         </div>
       </div>

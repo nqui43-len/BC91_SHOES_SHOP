@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import StoreLocation from "../components/StoreLocation";
-
-export interface ProductModel {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  shortDescription: string;
-}
+import ProductCard, { type ProductModel } from "../components/ProductCard";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -185,39 +178,12 @@ const Home = () => {
 
       <div className="row">
         {currentItems.map((item) => (
-          <div className="col-4 mb-4" key={item.id}>
-            <div className="product-card">
-              <div className="product-img-box">
-                <img src={item.image} alt={item.name} className="img-fluid" />
-                <i
-                  className={`${likedProducts.includes(item.id) ? "fa-solid text-danger" : "fa-regular text-dark"} fa-heart heart-icon`}
-                  style={{ cursor: "pointer", transition: "transform 0.2s" }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.2)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                  onClick={() => toggleLike(item.id)}
-                  title={
-                    likedProducts.includes(item.id)
-                      ? "Bỏ yêu thích"
-                      : "Thêm vào yêu thích"
-                  }
-                ></i>
-              </div>
-              <div className="product-info">
-                <h5 className="product-name">{item.name}</h5>
-                <p className="product-desc">{item.shortDescription}</p>
-              </div>
-              <div className="product-action">
-                <NavLink to={`/detail/${item.id}`} className="btn-buy-now">
-                  Buy now
-                </NavLink>
-                <div className="btn-price">{item.price.toLocaleString()} $</div>
-              </div>
-            </div>
-          </div>
+          <ProductCard
+            key={item.id}
+            item={item}
+            isLiked={likedProducts.includes(item.id)}
+            onToggleLike={toggleLike}
+          />
         ))}
       </div>
 

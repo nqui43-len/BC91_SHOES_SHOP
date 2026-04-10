@@ -9,17 +9,19 @@ const Header = () => {
   const userEmail = useSelector((state: RootState) => state.user.email);
   const cart = useSelector((state: RootState) => state.cart);
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userEmail");
     dispatch(logoutAction());
   };
+
   const renderLoginUI = () => {
     if (userEmail) {
       const nameDisplay = userEmail.split("@")[0];
       const firstLetter = nameDisplay.charAt(0).toUpperCase();
       return (
-        <div className="d-flex align-items-center gap-3">
+        <div className="d-flex align-items-center gap-2 gap-md-3 mt-3 mt-md-0">
           <NavLink
             to="/profile"
             className="d-flex align-items-center gap-2 text-decoration-none"
@@ -51,23 +53,24 @@ const Header = () => {
       );
     }
     return (
-      <>
-        <NavLink to="/login" className="text-white text-decoration-none me-3">
+      <div className="d-flex gap-3 mt-3 mt-md-0">
+        <NavLink to="/login" className="text-white text-decoration-none">
           Login
         </NavLink>
         <NavLink to="/register" className="text-white text-decoration-none">
           Register
         </NavLink>
-      </>
+      </div>
     );
   };
+
   return (
     <header>
       <div className="bg-dark text-white py-3">
-        <div className="container d-flex justify-content-between align-items-center">
+        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center">
           <NavLink
             to="/"
-            className="text-white text-decoration-none d-flex align-items-center"
+            className="text-white text-decoration-none d-flex align-items-center mb-3 mb-md-0"
           >
             <img
               src={logoCyber}
@@ -76,28 +79,27 @@ const Header = () => {
             />
           </NavLink>
 
-          <div className="d-flex align-items-center gap-4">
+          <div className="d-flex flex-wrap justify-content-center align-items-center gap-3 gap-md-4">
             <NavLink
               to="/search"
               className="text-white text-decoration-none d-flex align-items-center"
             >
-              <i className="fa fa-search me-2"></i>
-              Search
+              <i className="fa fa-search me-2"></i> Search
             </NavLink>
-
-            <NavLink
-              to="/carts"
-              className="text-white text-decoration-none me-3"
-            >
+            <NavLink to="/carts" className="text-white text-decoration-none">
               <i className="fa-solid fa-cart-shopping"></i> ({totalQuantity})
             </NavLink>
             {renderLoginUI()}
           </div>
         </div>
       </div>
-      <div className="bg-white py-3 shadow-sm">
+
+      <div className="bg-white py-3 shadow-sm overflow-auto">
         <div className="container">
-          <nav className="d-flex gap-4 fw-semibold fs-5">
+          <nav
+            className="d-flex flex-nowrap gap-4 fw-semibold fs-5"
+            style={{ whiteSpace: "nowrap" }}
+          >
             <NavLink
               to="/"
               className={({ isActive }) =>

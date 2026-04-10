@@ -57,7 +57,8 @@ const Login = () => {
       />
 
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        {/* Responsive Layout */}
+        <div className="col-12 col-md-8 col-lg-6">
           <form onSubmit={frm.handleSubmit}>
             <div className="mb-4">
               <label className="form-label text-secondary mb-1">Email</label>
@@ -105,18 +106,21 @@ const Login = () => {
               )}
             </div>
 
-            <div className="mt-4 d-flex justify-content-end align-items-center gap-4">
+            <div className="mt-4 d-flex flex-wrap justify-content-end align-items-center gap-3">
               <NavLink to="/register" className="register-link text-primary">
                 Register now ?
               </NavLink>
-              <button type="submit" className="btn-submit-purple">
+              <button
+                type="submit"
+                className="btn-submit-purple w-100 w-sm-auto"
+              >
                 LOGIN
               </button>
             </div>
 
             <div className="mt-4">
-              <button type="button" className="btn-facebook">
-                <i className="fa-brands fa-facebook"></i>
+              <button type="button" className="btn-facebook w-100">
+                <i className="fa-brands fa-facebook me-2"></i>
                 Continue with Facebook
               </button>
             </div>

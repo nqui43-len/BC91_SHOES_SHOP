@@ -60,7 +60,7 @@ const Register = () => {
       />
       <form onSubmit={frm.handleSubmit}>
         <div className="row gx-5">
-          <div className="col-md-6">
+          <div className="col-12 col-md-6 mb-4 mb-md-0">
             <div className="mb-4">
               <label className="form-label text-secondary mb-1">Email</label>
               <input
@@ -139,7 +139,7 @@ const Register = () => {
             </div>
           </div>
 
-          <div className="col-md-6">
+          <div className="col-12 col-md-6">
             <div className="mb-4">
               <label className="form-label text-secondary mb-1">Name</label>
               <input
@@ -202,7 +202,7 @@ const Register = () => {
             </div>
 
             <div className="mt-4">
-              <button type="submit" className="btn-submit-purple">
+              <button type="submit" className="btn-submit-purple w-100">
                 SUBMIT
               </button>
             </div>

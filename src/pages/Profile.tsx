@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useFormik } from "formik";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ProductCard, { type ProductModel } from "../components/ProductCard";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -12,7 +13,8 @@ const Profile = () => {
     "https://i.pravatar.cc/300",
   );
   const [ordersHistory, setOrdersHistory] = useState<any[]>([]);
-  const [favoriteProducts, setFavoriteProducts] = useState<any[]>([]);
+  const [favoriteProducts, setFavoriteProducts] = useState<ProductModel[]>([]);
+  const [likedProducts, setLikedProducts] = useState<number[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +65,7 @@ const Profile = () => {
         },
       );
       const profile = res.data.content;
+
       frm.setValues({
         email: profile.email,
         name: profile.name,
@@ -70,9 +73,54 @@ const Profile = () => {
         gender: profile.gender,
         password: "",
       });
+
       setOrdersHistory(profile.ordersHistory || []);
-      setFavoriteProducts(profile.productsFavorite || []);
+
+      const favs = profile.productsFavorite || [];
+      setFavoriteProducts(favs);
+      setLikedProducts(favs.map((p: any) => p.id));
     } catch (err) {}
+  };
+
+  const toggleLike = async (productId: number) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Vui lòng đăng nhập để sử dụng tính năng Yêu thích!");
+      navigate("/login");
+      return;
+    }
+
+    const isAlreadyLiked = likedProducts.includes(productId);
+
+    try {
+      if (isAlreadyLiked) {
+        await axios.get(
+          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        setLikedProducts(likedProducts.filter((id) => id !== productId));
+      } else {
+        await axios.get(
+          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        setLikedProducts([...likedProducts, productId]);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        alert("Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userEmail");
+        navigate("/login");
+      } else {
+        const errorMsg = err.response?.data?.content || "Lỗi kết nối";
+        if (errorMsg.includes("đã") || errorMsg.includes("already")) {
+          setLikedProducts([...likedProducts, productId]);
+        } else {
+          alert("Thao tác thất bại: " + errorMsg);
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -261,33 +309,12 @@ const Profile = () => {
               </div>
             ) : (
               favoriteProducts.map((item) => (
-                <div className="col-4 mb-4" key={item.id}>
-                  <div className="product-card">
-                    <div className="product-img-box">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="img-fluid"
-                      />
-                      <i className="fa-solid fa-heart heart-icon text-danger"></i>
-                    </div>
-                    <div className="product-info">
-                      <h5 className="product-name">{item.name}</h5>
-                      <p className="product-desc">{item.shortDescription}</p>
-                    </div>
-                    <div className="product-action">
-                      <NavLink
-                        to={`/detail/${item.id}`}
-                        className="btn-buy-now"
-                      >
-                        Buy now
-                      </NavLink>
-                      <div className="btn-price">
-                        {item.price?.toLocaleString()} $
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ProductCard
+                  key={item.id}
+                  item={item}
+                  isLiked={likedProducts.includes(item.id)}
+                  onToggleLike={toggleLike}
+                />
               ))
             )}
           </div>
@@ -296,4 +323,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;
