@@ -497,7 +497,6 @@ body {
   color: #e0e0e0 !important;
 }
 
-/* Header & Menu Menu */
 [data-bs-theme="dark"] .nav-link,
 [data-bs-theme="dark"] .menu-link {
   color: #a0a0a0 !important;
@@ -510,7 +509,6 @@ body {
   background-color: #ffffff;
 }
 
-/* Carousel & Product Card */
 [data-bs-theme="dark"] .custom-carousel {
   background-color: #1e1e1e;
 }
@@ -526,7 +524,6 @@ body {
   color: #e0e0e0 !important;
 }
 
-/* Forms & Inputs */
 [data-bs-theme="dark"] .custom-input,
 [data-bs-theme="dark"] .password-eye {
   background-color: #2a2a2a !important;
@@ -536,7 +533,6 @@ body {
   background-color: #3a3a3a !important;
 }
 
-/* Tables (Giỏ hàng & Lịch sử) */
 [data-bs-theme="dark"] .cart-header-row,
 [data-bs-theme="dark"] .order-table-header {
   background-color: #2a2a2a !important;
@@ -547,11 +543,23 @@ body {
   color: #ffffff;
 }
 
-/* Footer */
 [data-bs-theme="dark"] .footer-link,
 [data-bs-theme="dark"] .footer-copyright {
   color: #b0b0b0;
 }
 [data-bs-theme="dark"] .footer-link:hover {
   color: #f7941d;
+}
+
+[data-bs-theme="dark"] .bg-light img,
+[data-bs-theme="dark"] .table img,
+[data-bs-theme="dark"] .carousel-item img {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .bg-light {
+  background-color: #1e1e1e !important;
 }
