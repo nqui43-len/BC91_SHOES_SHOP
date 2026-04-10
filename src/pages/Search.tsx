@@ -21,7 +21,7 @@ const Search = () => {
           { headers: { Authorization: `Bearer ${token}` } },
         );
         const favs = res.data.content.productsFavorite || [];
-        setLikedProducts(favs.map((p: any) => p.id));
+        setLikedProducts(favs.map((p: any) => Number(p.id)));
       } catch (err) {}
     }
   };
@@ -42,7 +42,6 @@ const Search = () => {
 
   const toggleLike = async (productId: number) => {
     const token = localStorage.getItem("accessToken");
-
     if (!token) {
       alert("Vui lòng đăng nhập để sử dụng tính năng Yêu thích!");
       navigate("/login");
@@ -50,17 +49,18 @@ const Search = () => {
     }
 
     const isAlreadyLiked = likedProducts.includes(productId);
+    const timestamp = new Date().getTime();
 
     try {
       if (isAlreadyLiked) {
         await axios.get(
-          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}`,
+          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}&t=${timestamp}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setLikedProducts(likedProducts.filter((id) => id !== productId));
       } else {
         await axios.get(
-          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}`,
+          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}&t=${timestamp}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setLikedProducts([...likedProducts, productId]);

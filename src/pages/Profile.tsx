@@ -39,9 +39,7 @@ const Profile = () => {
         await axios.post(
           "https://shop.cyberlearn.vn/api/Users/updateProfile",
           values,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         alert("Cập nhật thông tin thành công!");
       } catch (err) {
@@ -60,9 +58,7 @@ const Profile = () => {
       const res = await axios.post(
         "https://shop.cyberlearn.vn/api/Users/getProfile",
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       const profile = res.data.content;
 
@@ -78,7 +74,7 @@ const Profile = () => {
 
       const favs = profile.productsFavorite || [];
       setFavoriteProducts(favs);
-      setLikedProducts(favs.map((p: any) => p.id));
+      setLikedProducts(favs.map((p: any) => Number(p.id)));
     } catch (err) {}
   };
 
@@ -91,17 +87,21 @@ const Profile = () => {
     }
 
     const isAlreadyLiked = likedProducts.includes(productId);
+    const timestamp = new Date().getTime();
 
     try {
       if (isAlreadyLiked) {
         await axios.get(
-          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}`,
+          `https://shop.cyberlearn.vn/api/Users/unlike?productId=${productId}&t=${timestamp}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setLikedProducts(likedProducts.filter((id) => id !== productId));
+        setFavoriteProducts(
+          favoriteProducts.filter((item) => item.id !== productId),
+        );
       } else {
         await axios.get(
-          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}`,
+          `https://shop.cyberlearn.vn/api/Users/like?productId=${productId}&t=${timestamp}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setLikedProducts([...likedProducts, productId]);
